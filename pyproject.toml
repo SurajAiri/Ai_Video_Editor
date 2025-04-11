@@ -8,6 +8,7 @@ dependencies = [
     "deepgram-sdk>=3.10.1",
     "ffmpeg>=1.4",
     "jupyter>=1.1.1",
+    "litellm>=1.65.7",
     "moviepy>=2.1.2",
     "openai-whisper>=20240930",
     "python-dotenv>=1.1.0",

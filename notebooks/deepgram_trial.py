@@ -9,7 +9,7 @@ from deepgram import (
 )
 
 # Path to the audio file
-AUDIO_FILE = "../artifacts/samples/11-vs-bonus.mp3"
+AUDIO_FILE = "../artifacts/samples/11-vs-bonus.mp4"
 
 def main():
     try:
