@@ -6,7 +6,7 @@ from typing import List, Dict
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
-VIDEO_PATH = "../artifacts/samples/11-vs-bonus.mp4"
+VIDEO_PATH = "../artifacts/samples/06-project-setup.mp4"
 TRANSCRIPT_PATH = "../artifacts/transcripts/11-vs-bonus.json"
 
 def get_video_duration(video_path: str) -> float:
