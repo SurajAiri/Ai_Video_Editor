@@ -11,8 +11,8 @@ RULES:
 2. For any sentence or meaningfully similar sentence that appears multiple times (even with minor modifications), consider only the very last occurrence as valid.
 3. Mark every previous occurrence (i.e., every occurrence that comes before the final one) as a repetition.
 4. The repetition status can be flagged per sentence or per partial segment within a sentence:
-    - If the entire sentence (or meaning) is repeated earlier, mark it as `"isEntire": true`.
-    - If only a part of the sentence is repeated and later completed, mark it as `"isEntire": false`.
+    - If the entire sentence (or meaning) is repeated earlier, mark it as `"is_entire": true`.
+    - If only a part of the sentence is repeated and later completed, mark it as `"is_entire": false`.
 5. Do NOT alter any original timestamps. Return them exactly as provided.
 6. Analysis must consider the context of the transcript, so even if sentences are slightly modified, treat them as the same if their meaning is essentially identical.
 
@@ -23,10 +23,10 @@ Format: start_time end_time text
 
 OUTPUT FORMAT:
 Return a JSON object with a single key "data", which contains an array of objects. Each object should have these keys:
-- "startTime": Timestamp (SS.sss)
-- "endTime": Timestamp (SS.sss)
+- "start_time": Timestamp (SS.sss)
+- "end_time": Timestamp (SS.sss)
 - "type": Always "repetition"
-- "isEntire": true or false
+- "is_entire": true or false
 
 Only include objects for segments that are repetitions (i.e., all the repeated occurrences except the final instance).
 
@@ -42,10 +42,10 @@ Output:
 {{
     "data": [
         {{
-            "startTime": "0.32",
-            "endTime": "2.26",
+            "start_time": "0.32",
+            "end_time": "2.26",
             "type": "repetition",
-            "isEntire": true
+            "is_entire": true
         }}
     ]
 }}
@@ -64,4 +64,33 @@ Always assume that the LAST occurrence in chronological order is the valid, corr
 Return only the JSON output (as specified in the format) without extra commentary.
 """
 
+    return prompt
+
+
+def generate_word_analysis_prompt(transcript:str,)->str:
+    """
+    Generate the prompt for the analysis of the transcript
+    """
+
+    prompt = f"""
+Analyze the provided transcript with word-level timestamps. Detect any repeated phrases or word sequences that appear more than once. If repetition is found don't include the last occurrence as there must be at least one instance. Output with the following JSON format:
+
+{{
+  "data": [
+    {{
+      "start_time": "<start_timestamp_of_first_occurrence>",
+      "end_time": "<end_timestamp_of_first_occurrence>",
+      "type": "repetition",
+      "is_entire": true
+    }}
+  ]
+}}
+
+Transcript:
+{transcript}
+Rules:
+Combine repetitions if they are continuous.
+Do not mark the later (last) occurrence(s) of the phrase as repetition.
+Return only the first occurrence of each repeated phrase in the JSON response.
+"""
     return prompt
