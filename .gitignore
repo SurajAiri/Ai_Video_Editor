@@ -35,6 +35,14 @@ mlruns*/
 output/
 outputs/
 
+# media
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.mp3
+*.wav
+
 # datasets
 *.csv
 *.xlsx
