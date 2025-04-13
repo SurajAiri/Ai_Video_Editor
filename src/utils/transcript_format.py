@@ -1,4 +1,4 @@
-from models.invalid_model import InvalidModel
+from src.models.invalid_model import InvalidModel
 from typing import List
 
 def format_deepgram_transcript_sent(transcript:dict):
@@ -35,40 +35,40 @@ def format_deepgram_transcript_word(transcript:dict, invalids: List[InvalidModel
         res += "\n"
     return res
 
-res = """{
-  "data": [
-    {
-      "start_time": "0.48",
-      "end_time": "7.12",
-      "type": "repetition",
-      "is_entire": true
-    },
-    {
-      "start_time": "35.56",
-      "end_time": "43.02",
-      "type": "repetition",
-      "is_entire": true
-    },
-    {
-      "start_time": "10.72",
-      "end_time": "15.60",
-      "type": "repetition",
-      "is_entire": false
-    }
-  ]
-}"""
-import json
-res = json.loads(res)
-print(res['data'])
+# res = """{
+#   "data": [
+#     {
+#       "start_time": "0.48",
+#       "end_time": "7.12",
+#       "type": "repetition",
+#       "is_entire": true
+#     },
+#     {
+#       "start_time": "35.56",
+#       "end_time": "43.02",
+#       "type": "repetition",
+#       "is_entire": true
+#     },
+#     {
+#       "start_time": "10.72",
+#       "end_time": "15.60",
+#       "type": "repetition",
+#       "is_entire": false
+#     }
+#   ]
+# }"""
+# import json
+# res = json.loads(res)
+# print(res['data'])
 
-trans_path = "/Users/suraj/vscode/aiml/genai/ai_video_editor/notebooks/transcript2.json"
-with open(trans_path, 'r') as file:
-    transcript = json.load(file)
+# trans_path = "/Users/suraj/vscode/aiml/genai/ai_video_editor/notebooks/transcript2.json"
+# with open(trans_path, 'r') as file:
+#     transcript = json.load(file)
 
-invalids = [ InvalidModel.from_dict(item) for item in res['data'] ]
-# print(invalids)
-# sort invalids by start_time
-invalids.sort(key=lambda x: x.start_time)
+# invalids = [ InvalidModel.from_dict(item) for item in res['data'] ]
+# # print(invalids)
+# # sort invalids by start_time
+# invalids.sort(key=lambda x: x.start_time)
 
-invalid_words = format_deepgram_transcript_word(transcript, invalids)
-print(invalid_words)
+# invalid_words = format_deepgram_transcript_word(transcript, invalids)
+# print(invalid_words)

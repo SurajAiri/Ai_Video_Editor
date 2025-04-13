@@ -1,6 +1,6 @@
 import os
 from litellm import completion
-from prompt import generate_sent_analysis_prompt, generate_word_analysis_prompt
+from src.llm.prompt import generate_sent_analysis_prompt, generate_word_analysis_prompt
 from dotenv import load_dotenv
 
 load_dotenv()
