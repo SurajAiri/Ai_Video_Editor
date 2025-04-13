@@ -11,5 +11,6 @@ dependencies = [
     "litellm>=1.65.7",
     "moviepy>=2.1.2",
     "openai-whisper>=20240930",
+    "pyqt5>=5.15.11",
     "python-dotenv>=1.1.0",
 ]

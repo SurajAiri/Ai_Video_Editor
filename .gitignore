@@ -2,6 +2,8 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*/__pycache__/
+*.pyc
 
 # C extensions
 *.so
@@ -20,8 +22,6 @@ mlruns*/
 
 
 # models
-model/
-models/
 *.h5
 *.pkl
 *.onnx
