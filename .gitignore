@@ -34,6 +34,8 @@ mlruns*/
 # output
 output/
 outputs/
+temp/
+tmp/
 
 # media
 *.mp4
