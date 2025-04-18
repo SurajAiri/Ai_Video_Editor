@@ -9,8 +9,8 @@ class ProjectStatus(str, Enum):
     SENT_ANALYSIS_END = ('sent_analysis_end', 6)
     WORD_ANALYSIS_START = ('word_analysis_start', 7)
     WORD_ANALYSIS_END = ('word_analysis_end', 8)
-    PROCESS_INVALID = ('process_invalid', 9) 
-    UPDATED = ('updated', 10)
+    PROCESSED_INVALID_SEGMENT = ('processed_invalid_segment', 9) 
+    TRIM_START = ('trim_start', 10)
     COMPLETED = ('completed', 11)
     
     def __new__(cls, value, order):
