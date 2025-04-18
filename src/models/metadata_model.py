@@ -3,12 +3,13 @@ import json
 import os
 from pydantic import BaseModel
 from src.utils.constants import TEMP_DIR
-from src.utils.enums import ProjectStatus
+from src.models.project_status import ProjectStatus
 
 
 class MetadataModel(BaseModel):
     input_path: str
     job_id: str
+    is_processing: bool = False
     file_extension: str
     output_name: str = "output"
     status:ProjectStatus = ProjectStatus.CREATED
@@ -30,6 +31,14 @@ class MetadataModel(BaseModel):
             print("Metadata saved successfully.")
         except Exception as e:
             raise Exception(f"Failed to save metadata: {str(e)}")
+
+    @classmethod
+    def from_dict(cls, data):
+        try:
+            data['status'] = ProjectStatus.from_string(data['status'])
+            return cls(**data)
+        except Exception as e:
+            raise ValueError(f"Failed to create MetadataModel from dict: {str(e)}")
 
     @classmethod
     def load_metadata(self, job_id: str):
