@@ -33,9 +33,8 @@ def _upload_file(file_path: str):
             status="success",
             message="File uploaded successfully",
             job_id=meta.job_id,
-            # data=meta.to_dict()
+            data=meta.to_dict(),
             project_status=meta.status.to_string(),
-            data=None
         )
     
     except Exception as e:

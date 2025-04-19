@@ -6,6 +6,8 @@ from src.models.project_status import ProjectStatus
 from src.models.response_model import ResponseModel
 from src.utils.constants import TEMP_DIR
 
+def format_word_transcript(transcript: dict) -> dict:
+    return transcript['results']['channels'][0]['alternatives'][0]['words']
 
 def _fetch_transcript(job_id: str) -> str:
     """
@@ -34,7 +36,7 @@ def _fetch_transcript(job_id: str) -> str:
             message="Transcript fetched successfully",
             job_id=job_id,
             project_status=meta.status.to_string(),
-            data=transcript
+            data={"transcript": format_word_transcript(transcript)}
         )
     except Exception as e:
         return ResponseModel(

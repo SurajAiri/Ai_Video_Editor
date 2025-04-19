@@ -2,7 +2,7 @@ import os
 import argparse
 
 from fastapi import BackgroundTasks, FastAPI
-from src.api.fetch import _fetch_transcript
+from src.api.transcript import _fetch_transcript
 from src.api.invalids import _fetch_invalid_segments, _override_invalid
 from src.api.process_all import _process_all
 from src.api.status import _get_status
@@ -12,6 +12,7 @@ from src.api.upload_file import _upload_file
 from src.models.invalid_model import InvalidModel
 from src.models.metadata_model import MetadataModel
 from src.models.response_model import ResponseModel
+from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -20,13 +21,23 @@ load_dotenv()
 app = FastAPI(title="AI Video Editor API", 
         description="API for automatically trimming videos based on content analysis")
 
+        # Add CORS middleware to allow all origins
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the AI Video Editor API"}
 
-@app.post("/upload", response_model=ResponseModel)
+@app.post("/upload")
 def upload_file(file_path: str):
+    print("we got")
+    print("[DEBUG] Uploading file:", file_path)
     return _upload_file(file_path)
 
 @app.post("/process_all", response_model=ResponseModel)
