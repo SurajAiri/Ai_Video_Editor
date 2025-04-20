@@ -12,6 +12,8 @@ from src.transcribe.deepgram_transcriber import deepgram_transcribe
 from src.utils.constants import TEMP_DIR
 from src.utils.json_parser import llm_json_parser
 from src.utils.transcript_format import format_deepgram_transcript_sent, format_deepgram_transcript_word
+import time
+import random
 
 
 def process_together(meta: MetadataModel, is_debug=False):
@@ -115,6 +117,69 @@ def process_together(meta: MetadataModel, is_debug=False):
         meta.save_metadata()
         raise e
 
+def dummy_process_together(meta: MetadataModel):
+    """
+    A dummy implementation of process_together that simulates the processing flow
+    by changing the status every second until completion.
+    """
+    if meta.is_processing:
+        raise ValueError("Processing is already in progress.")
+    
+    try:
+        print(f"[DEBUG] Starting dummy processing for job {meta.job_id}")
+        meta.is_processing = True
+        meta.save_metadata()
+        
+        # Create necessary directories
+        job_dir = os.path.join(TEMP_DIR, meta.job_id)
+        os.makedirs(job_dir, exist_ok=True)
+        
+        # Simulate the processing steps with delays
+        statuses = [
+            ProjectStatus.TRANSCRIPT_START,
+            ProjectStatus.TRANSCRIPT_COMPLETE,
+            ProjectStatus.SENT_ANALYSIS_START,
+            ProjectStatus.SENT_ANALYSIS_END,
+            ProjectStatus.WORD_ANALYSIS_START,
+            ProjectStatus.WORD_ANALYSIS_END,
+            ProjectStatus.PROCESSED_INVALID_SEGMENT
+        ]
+        
+        for status in statuses:
+            meta.status = status
+            meta.save_metadata()
+            print(f"[DEBUG] Status changed to {status.to_string()} for job {meta.job_id}")
+            
+            # Create dummy files for each step
+            if status == ProjectStatus.TRANSCRIPT_COMPLETE:
+                with open(os.path.join(job_dir, "transcript.json"), "w") as f:
+                    json.dump({"dummy": "transcript"}, f)
+            elif status == ProjectStatus.SENT_ANALYSIS_END:
+                dummy_analysis = {"data": [{"start_time": i, "end_time": i+1, "text": f"Sample text {i}", "is_entire": random.choice([True, False])} for i in range(5)]}
+                with open(os.path.join(job_dir, "analysis_sent.json"), "w") as f:
+                    json.dump(dummy_analysis, f)
+            elif status == ProjectStatus.WORD_ANALYSIS_END:
+                dummy_word_analysis = {"data": [{"start_time": i+0.2, "end_time": i+0.3, "text": f"word {i}", "is_entire": False} for i in range(10)]}
+                with open(os.path.join(job_dir, "analysis_word.json"), "w") as f:
+                    json.dump(dummy_word_analysis, f)
+            elif status == ProjectStatus.PROCESSED_INVALID_SEGMENT:
+                all_invalids = {"data": [{"start_time": i, "end_time": i+0.5, "text": f"invalid {i}", "is_entire": random.choice([True, False])} for i in range(8)]}
+                with open(os.path.join(job_dir, "all_invalids.json"), "w") as f:
+                    json.dump(all_invalids, f)
+            
+            # Sleep for 1 second to simulate processing time
+            time.sleep(1)
+        
+        meta.is_processing = False
+        meta.save_metadata()
+        print(f"[DEBUG] Dummy processing completed successfully for job {meta.job_id}")
+        
+    except Exception as e:
+        print(f"[DEBUG] Error during dummy processing: {str(e)}")
+        meta.is_processing = False
+        meta.save_metadata()
+        raise e
+
 async def _process_all(job_id:str, background_tasks:BackgroundTasks):
     try:
         print(f"[DEBUG] Received process_all request for job_id: {job_id}")
@@ -132,7 +197,7 @@ async def _process_all(job_id:str, background_tasks:BackgroundTasks):
 
         # Start the transcription process    
         print(f"[DEBUG] Starting background task for job_id: {job_id}")
-        background_tasks.add_task(process_together, meta)
+        background_tasks.add_task(dummy_process_together, meta)
 
         return ResponseModel(
             status="success",

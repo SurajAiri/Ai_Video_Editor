@@ -2,6 +2,7 @@ import os
 import argparse
 
 from fastapi import BackgroundTasks, FastAPI
+from pydantic import BaseModel
 from src.api.transcript import _fetch_transcript
 from src.api.invalids import _fetch_invalid_segments, _override_invalid
 from src.api.process_all import _process_all
@@ -34,15 +35,20 @@ app.add_middleware(
 def read_root():
     return {"message": "Welcome to the AI Video Editor API"}
 
+class FilePathModel(BaseModel):
+    file_path: str
+
+class JobIdModel(BaseModel):
+    job_id: str
+    
 @app.post("/upload")
-def upload_file(file_path: str):
-    print("we got")
-    print("[DEBUG] Uploading file:", file_path)
-    return _upload_file(file_path)
+async def upload_file(data: FilePathModel):
+    print("[DEBUG] Uploading file:", data.file_path)
+    return _upload_file(data.file_path)
 
 @app.post("/process_all", response_model=ResponseModel)
-async def process_all(job_id:str, background_tasks:BackgroundTasks):
-    return _process_all(job_id, background_tasks)
+async def process_all(data: JobIdModel, background_tasks: BackgroundTasks):
+    return await _process_all(data.job_id, background_tasks)
 
 @app.get("/status/{job_id}", response_model=ResponseModel)
 async def get_status(job_id: str):
