@@ -4,6 +4,27 @@ from uuid import uuid4
 from src.models.metadata_model import MetadataModel
 from src.models.project_status import ProjectStatus
 from src.models.response_model import ResponseModel
+from src.utils.constants import TEMP_DIR
+
+
+def _already_uploaded(file_path: str) -> MetadataModel | None:
+    """
+    Check if the file has already uploaded checking all metadata files
+    in the sub-directory of TEMP_DIR.
+    :param file_path: The path of the file to check.
+    :return: job_id if the file has already been uploaded, None otherwise.
+    """
+
+    try:
+
+        for dir in os.listdir(TEMP_DIR):
+            meta = MetadataModel.load_metadata(dir)
+            if meta.input_path == file_path:
+                return meta
+
+        return None
+    except Exception as e:
+        return None
 
 
 def _upload_file(file_path: str):
@@ -14,6 +35,17 @@ def _upload_file(file_path: str):
         # Check if the file is a video
         if not file_path.lower().endswith(('.mp4', '.avi', '.mov', '.mkv')):
             raise ValueError("File is not a valid video format.")
+
+        # Check if the file has already been uploaded
+        meta = _already_uploaded(file_path)
+        if meta:
+            return ResponseModel(
+                status="success-already-uploaded",
+                message="File already uploaded",
+                job_id=meta.job_id,
+                data=meta.to_dict(),
+                project_status=meta.status.to_string(),
+            )
 
         job_id = str(uuid4())
         file_extension = os.path.splitext(file_path)[1]
