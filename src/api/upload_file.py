@@ -40,7 +40,7 @@ def _upload_file(file_path: str):
         meta = _already_uploaded(file_path)
         if meta:
             return ResponseModel(
-                status="success-already-uploaded",
+                status="success",
                 message="File already uploaded",
                 job_id=meta.job_id,
                 data=meta.to_dict(),

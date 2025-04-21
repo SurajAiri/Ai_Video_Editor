@@ -35,6 +35,29 @@ def format_deepgram_transcript_word(transcript:dict, invalids: List[InvalidModel
         res += "\n"
     return res
 
+
+def dummy_word_transcript():
+    return {
+        "results": {
+            "channels": [
+                {
+                    "alternatives": [
+                        {
+                            "words": [
+                                {"word": "Hello", "start": 0.0, "end": 1.0, "confidence": 0.98, "punctuated_word": "Hello"},
+                                {"word": "world", "start": 1.0, "end": 2.0, "confidence": 0.99, "punctuated_word": "world"},
+                                {"word": "this", "start": 2.0, "end": 3.0, "confidence": 0.97, "punctuated_word": "this"},
+                                {"word": "is", "start": 3.0, "end": 4.0, "confidence": 0.99, "punctuated_word": "is"},
+                                {"word": "a", "start": 4.0, "end": 5.0, "confidence": 0.95, "punctuated_word": "a"},
+                                {"word": "test", "start": 5.0, "end": 6.0, "confidence": 0.98, "punctuated_word": "test"}
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+
 # res = """{
 #   "data": [
 #     {

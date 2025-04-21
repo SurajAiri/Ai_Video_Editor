@@ -11,7 +11,7 @@ from src.models.response_model import ResponseModel
 from src.transcribe.deepgram_transcriber import deepgram_transcribe
 from src.utils.constants import TEMP_DIR
 from src.utils.json_parser import llm_json_parser
-from src.utils.transcript_format import format_deepgram_transcript_sent, format_deepgram_transcript_word
+from src.utils.transcript_format import dummy_word_transcript, format_deepgram_transcript_sent, format_deepgram_transcript_word
 import time
 import random
 
@@ -153,7 +153,7 @@ def dummy_process_together(meta: MetadataModel):
             # Create dummy files for each step
             if status == ProjectStatus.TRANSCRIPT_COMPLETE:
                 with open(os.path.join(job_dir, "transcript.json"), "w") as f:
-                    json.dump({"dummy": "transcript"}, f)
+                    json.dump(dummy_word_transcript(), f)
             elif status == ProjectStatus.SENT_ANALYSIS_END:
                 dummy_analysis = {"data": [{"start_time": i, "end_time": i+1, "text": f"Sample text {i}", "is_entire": random.choice([True, False])} for i in range(5)]}
                 with open(os.path.join(job_dir, "analysis_sent.json"), "w") as f:
@@ -163,7 +163,7 @@ def dummy_process_together(meta: MetadataModel):
                 with open(os.path.join(job_dir, "analysis_word.json"), "w") as f:
                     json.dump(dummy_word_analysis, f)
             elif status == ProjectStatus.PROCESSED_INVALID_SEGMENT:
-                all_invalids = {"data": [{"start_time": i, "end_time": i+0.5, "text": f"invalid {i}", "is_entire": random.choice([True, False])} for i in range(8)]}
+                all_invalids = {"data": [InvalidModel().to_dict() for i in range(2)]}
                 with open(os.path.join(job_dir, "all_invalids.json"), "w") as f:
                     json.dump(all_invalids, f)
             
