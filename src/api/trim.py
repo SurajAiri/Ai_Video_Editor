@@ -7,7 +7,7 @@ from src.models.invalid_model import InvalidModel
 from src.models.metadata_model import MetadataModel
 from src.models.project_status import ProjectStatus
 from src.models.response_model import ResponseModel
-from src.utils import video_trimmer
+from src.utils.video_trimmer import trim_video as video_trimmer
 from src.utils.constants import TEMP_DIR
 
 
@@ -44,6 +44,7 @@ def _trim_video(meta: MetadataModel):
     except Exception as e:
         print(f"[DEBUG] Error during video trimming: {str(e)}")
         meta.is_processing = False
+        meta.status = ProjectStatus.PROCESSED_INVALID_SEGMENT
         meta.save_metadata()
         raise e
     

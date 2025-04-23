@@ -197,7 +197,7 @@ async def _process_all(job_id:str, background_tasks:BackgroundTasks):
 
         # Start the transcription process    
         print(f"[DEBUG] Starting background task for job_id: {job_id}")
-        background_tasks.add_task(dummy_process_together, meta)
+        background_tasks.add_task(process_together, meta)
 
         return ResponseModel(
             status="success",

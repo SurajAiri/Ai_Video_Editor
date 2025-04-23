@@ -55,12 +55,12 @@ async def get_status(job_id: str):
     return await _get_status(job_id)
 
 @app.post("/trim", response_model=ResponseModel)
-async def trim(job_id: str, background_tasks: BackgroundTasks):
-    return _trim(job_id, background_tasks)
+async def trim(data: JobIdModel, background_tasks: BackgroundTasks):
+    return await _trim(data.job_id, background_tasks)
 
 @app.post("/transcribe", response_model=ResponseModel)
-async def transcribe_video(job_id:str, background_tasks: BackgroundTasks):
-    return _transcribe_video(job_id, background_tasks)
+async def transcribe_video(data: JobIdModel, background_tasks: BackgroundTasks):
+    return await _transcribe_video(data.job_id, background_tasks)
 
 @app.get("/transcript/{job_id}", response_model=ResponseModel)
 def get_transcript(job_id: str):
