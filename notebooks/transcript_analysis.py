@@ -42,7 +42,7 @@ resp = {
     {
       "startTime": "16.66",
       "endTime": "24.27",
-      "type": "filler_word",
+      "type": "filler_words",
       "isEntire": False
     },
     {
@@ -54,19 +54,19 @@ resp = {
     {
       "startTime": "43.02",
       "endTime": "47.57",
-      "type": "filler_word",
+      "type": "filler_words",
       "isEntire": False
     },
     {
       "startTime": "47.57",
       "endTime": "54.70",
-      "type": "filler_word",
+      "type": "filler_words",
       "isEntire": False
     },
     {
       "startTime": "61.13",
       "endTime": "62.33",
-      "type": "filler_word",
+      "type": "filler_words",
       "isEntire": False
     }
   ]

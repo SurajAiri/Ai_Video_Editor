@@ -61,6 +61,12 @@ def _override_invalid(job_id: str, invalids: list[InvalidModel]) -> str:
         
         # Update the invalid segments
         all_invalids_path = os.path.join(TEMP_DIR, job_id, "all_invalids.json")
+
+        # backup the old
+        if os.path.exists(all_invalids_path):
+            backup_path = os.path.join(TEMP_DIR, job_id, "all_invalids_old.json")
+            if not os.path.exists(backup_path):
+                os.rename(all_invalids_path, backup_path)
         
         # Convert InvalidModel objects to dictionaries
         invalid_dicts = [invalid.to_dict() for invalid in invalids]
@@ -78,6 +84,7 @@ def _override_invalid(job_id: str, invalids: list[InvalidModel]) -> str:
             message="Invalid segments updated successfully",
             job_id=job_id,
             project_status=meta.status.to_string(),
+            data=None
         )
     except Exception as e:
         return ResponseModel(

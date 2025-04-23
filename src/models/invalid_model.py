@@ -4,7 +4,7 @@ from typing import Optional, Literal
 class InvalidModel(BaseModel):
     start_time: float = 0.48
     end_time: float = 7.12
-    type: Literal["repetition", "filler_word", "long_pause"] = "repetition"
+    type: Literal["repetition", "filler_words", "long_pause"] = "repetition"
     is_entire: bool = True
     
     def to_dict(self):

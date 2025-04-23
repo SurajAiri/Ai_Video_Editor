@@ -480,7 +480,7 @@ class VideoEditor(QMainWindow):
             {
                 "start_time": "2.60",
                 "end_time": "2.85",
-                "type": "filler_word",
+                "type": "filler_words",
                 "is_entire": True
             },
             {

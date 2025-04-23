@@ -70,9 +70,14 @@ def get_transcript(job_id: str):
 def get_invalids(job_id:str):
     return _fetch_invalid_segments(job_id)
 
+class OverrideInvalidsModel(BaseModel):
+    data: list[InvalidModel]
+
 @app.post("/override_invalids/{job_id}", response_model=ResponseModel)
-def override_invalids(job_id:str, invalids: list[InvalidModel]):
-    return _override_invalid(job_id, invalids)
+def override_invalids(job_id:str, invalids: OverrideInvalidsModel):
+    print("[DEBUG] Overriding invalids for job_id:", job_id)
+    return _override_invalid(job_id, invalids.data)
+    # return {"status": "success", "message": "Invalids overridden successfully", "job_id": job_id}
 
 
 
